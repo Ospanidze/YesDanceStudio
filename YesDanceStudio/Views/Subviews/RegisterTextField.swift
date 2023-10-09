@@ -58,10 +58,12 @@ final class RegisterTextField: UITextField {
     }
     
     private func setupTexField(placeholder: String) {
-        delegate = self
+        //delegate = self
         
         if type == .number {
             keyboardType = .phonePad
+        } else {
+            isSecureTextEntry = true
         }
         
         font = UIFont(name: "Avenir Next", size: 18)
@@ -84,12 +86,12 @@ final class RegisterTextField: UITextField {
     }
 }
 
-extension RegisterTextField: UITextFieldDelegate {
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        isFailed = false
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-    }
-}
+//extension RegisterTextField: UITextFieldDelegate {
+//    func textFieldDidBeginEditing(_ textField: UITextField) {
+//        isFailed = false
+//    }
+//
+//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+//        textField.resignFirstResponder()
+//    }
+//}

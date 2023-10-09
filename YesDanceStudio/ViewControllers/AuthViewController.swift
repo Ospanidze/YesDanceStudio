@@ -7,7 +7,14 @@
 
 import UIKit
 
+struct Person {
+    let number = "+77777777777"
+    let password = "123"
+}
+
 final class AuthViewController: UIViewController {
+    
+    private let person = Person()
         
     private var authView: AuthView? {
         view as? AuthView
@@ -28,10 +35,16 @@ final class AuthViewController: UIViewController {
     }
     
     @objc func authButtonTapped() {
-        //authView?.shakeAnimation()
-        checkTextFileds()
-//        let vc = RootViewController()
-//        navigationController?.pushViewController(vc, animated: true)
+        if checkTextFileds() && checkAuth() {
+            let vc = RootViewController()
+            navigationController?.pushViewController(vc, animated: true)
+        }
+    }
+    
+    @objc func forgetButtonTapped() {
+        let vc = PhoneViewController()
+        vc.modalPresentationStyle = .fullScreen
+        present(vc, animated: true)
     }
     
     private func checkTextFileds() -> Bool {
@@ -47,6 +60,22 @@ final class AuthViewController: UIViewController {
         }
 
         return result
+    }
+    
+    private func checkAuth() -> Bool {
+        guard let number = authView?.getText(.number) else {
+            return false
+        }
+        
+        if person.number == "+" + number
+            && person.password == authView?.getText(.password) {
+            print("yes")
+            
+            return true
+        } else {
+            authView?.statusLabelIsNotHidden()
+        }
+        return false
     }
 }
 
