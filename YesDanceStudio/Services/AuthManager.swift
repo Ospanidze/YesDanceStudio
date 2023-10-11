@@ -6,6 +6,7 @@
 //
 
 import FirebaseAuth
+import Firebase
 
 final class AuthManager {
     
@@ -20,9 +21,11 @@ final class AuthManager {
     func startAuth(phoneNumber: String, completion: @escaping(Bool) -> Void) {
         PhoneAuthProvider.provider().verifyPhoneNumber(phoneNumber, uiDelegate: nil) { [weak self] veficationID, error in
             guard let veficationID, error == nil else {
+                completion(false)
                 return
             }
             self?.veficationID = veficationID
+            print(veficationID)
             completion(true)
         }
     }
@@ -43,7 +46,17 @@ final class AuthManager {
                 completion(false)
                 return
             }
-            
+//            print(result?.user.email)
+            completion(true)
+        }
+    }
+    
+    func signIn(with numberPhone: String, and password: String, completion: @escaping(Bool) -> Void) {
+        auth.signIn(withEmail: numberPhone, password: password) { result, error in
+            guard let _ = result, error == nil else {
+                completion(false)
+                return
+            }
             completion(true)
         }
     }

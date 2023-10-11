@@ -61,7 +61,7 @@ final class RegisterTextField: UITextField {
         //delegate = self
         
         if type == .number {
-            keyboardType = .phonePad
+            keyboardType = .numberPad
         } else {
             isSecureTextEntry = true
         }
@@ -71,7 +71,10 @@ final class RegisterTextField: UITextField {
         textColor = #colorLiteral(red: 0.2156862745, green: 0.2156862745, blue: 0.2156862745, alpha: 1)
         backgroundColor = .white
         
+        
         returnKeyType = .done
+        autocorrectionType = .no
+        autocapitalizationType = .none
         
         layer.cornerRadius = 10
         layer.borderWidth = 1

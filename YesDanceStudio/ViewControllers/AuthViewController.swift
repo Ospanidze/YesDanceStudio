@@ -35,16 +35,29 @@ final class AuthViewController: UIViewController {
     }
     
     @objc func authButtonTapped() {
+//        if checkTextFileds() && checkAuth() {
+//            authView?.activityIndicatorStartAnimating()
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+//                self.authView?.activityIndicatorStopAnimating()
+//                let vc = RootViewController()
+//                self.navigationController?.pushViewController(vc, animated: true)
+//            }
+//        }
+        
         if checkTextFileds() && checkAuth() {
-            let vc = RootViewController()
-            navigationController?.pushViewController(vc, animated: true)
+            authView?.activityIndicatorStartAnimating()
+            authView?.statusLabelIsGood()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                self.authView?.activityIndicatorStopAnimating()
+                let vc = RootViewController()
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
         }
     }
     
     @objc func forgetButtonTapped() {
         let vc = PhoneViewController()
-        vc.modalPresentationStyle = .fullScreen
-        present(vc, animated: true)
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     private func checkTextFileds() -> Bool {
@@ -63,19 +76,62 @@ final class AuthViewController: UIViewController {
     }
     
     private func checkAuth() -> Bool {
-        guard let number = authView?.getText(.number) else {
-            return false
-        }
+//        guard let number = authView?.getText(.number) else {
+//            return
+//        }
+//        guard let passwordText = authView?.getText(.password) else { return }
+//
+//        AuthManager.shared.signIn(with: number, and: passwordText) { [weak self] success in
+//            if success {
+//                self?.authView?.statusLabelIsGood()
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+//                    self?.authView?.activityIndicatorStopAnimating()
+//                    let vc = RootViewController()
+//                    self?.navigationController?.pushViewController(vc, animated: true)
+//                }
+//            } else {
+//                self?.authView?.statusLabelIsNotHidden()
+//            }
+//        }
         
-        if person.number == "+" + number
-            && person.password == authView?.getText(.password) {
-            print("yes")
-            
+        guard let number = phoneNumberText() else { return false }
+        guard let password = authView?.getText(.password) else { return false }
+        
+        if person.number == "+" + number && person.password == password {
             return true
         } else {
             authView?.statusLabelIsNotHidden()
         }
+        
         return false
+    }
+    
+    private func phoneNumberText() -> String? {
+        guard let text = authView?.getText(.number) else { return nil }
+        
+        let number = text
+        var result = ""
+        var anotherNumber = result
+       
+        number.forEach { char in
+            let string = String(char)
+            
+            if let _ = Int(string) {
+                result += string
+            }
+        }
+        
+        if anotherNumber.count > 11 {
+            anotherNumber.removeLast()
+        }
+        
+        if result.count == 11 {
+            return result
+        } else if anotherNumber.count == 11 {
+            return anotherNumber
+        }
+        
+        return nil
     }
 }
 

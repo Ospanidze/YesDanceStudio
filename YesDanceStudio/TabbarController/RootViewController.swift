@@ -73,6 +73,7 @@ final class RootViewController: UITabBarController {
             scheduleNavigationVC,
             profileNavigationVC
         ]
+        
     }
     
     private func setupBarButtons() {

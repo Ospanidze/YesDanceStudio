@@ -23,7 +23,7 @@ final class PhoneView: UIView {
     )
     
     private let statusLabel = UILabel(
-        text: "Неправильный логин и пароль",
+        text: "Неверный номер",
         font: UIFont.italicSystemFont(ofSize: 14),
         foregroundColor: .pinkColor()
     )
@@ -58,6 +58,7 @@ final class PhoneView: UIView {
     
     func statusLabelIsNotHidden() {
         statusLabel.isHidden = false
+        statusLabel.shakeAnimation()
     }
     
     private func configure() {
@@ -104,7 +105,6 @@ extension PhoneView: UITextFieldDelegate {
         if let text = textField.text, let rangeText = Range(range, in: text) {
             
             let updateText = text.replacingCharacters(in: rangeText, with: string)
-            
             numberTextField.text = updateText.formatMobileNumber()
             return false
         }

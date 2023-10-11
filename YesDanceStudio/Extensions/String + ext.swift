@@ -16,7 +16,6 @@ extension String {
     
     func formatMobileNumber() -> String {
         let cleanPhoneNumber = components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
-        print(cleanPhoneNumber)
         var result = ""
         var startIndex = cleanPhoneNumber.startIndex
         let endIndex = cleanPhoneNumber.endIndex

@@ -40,22 +40,48 @@ final class PhoneViewController: UIViewController {
     }
     
     private func checkAuth()  {
-        guard let text = phoneView?.getText(), !text.isEmpty else {
-            return
-        }
-        let number = "+" + text
-           
-        guard number == Person().number else {
+        
+        guard let result = phoneNumberText() else {
             phoneView?.statusLabelIsNotHidden()
             return
         }
-        AuthManager.shared.startAuth(phoneNumber: number) { [weak self] success in
-            guard success else { return }
-            DispatchQueue.main.async {
-                let vc = RootViewController()
-                self?.navigationController?.pushViewController(vc, animated: true)
+        
+        AuthManager.shared.startAuth(phoneNumber: "+" + result) { [weak self] success in
+            if success {
+                DispatchQueue.main.async {
+                    let vc = SMSCodeViewController()
+                    self?.navigationController?.pushViewController(vc, animated: true)
+                }
             }
         }
+    }
+    
+    private func phoneNumberText() -> String? {
+        guard let text = phoneView?.getText() else { return nil }
+        
+        let number = text
+        var result = ""
+        var anotherNumber = result
+       
+        number.forEach { char in
+            let string = String(char)
+            
+            if let _ = Int(string) {
+                result += string
+            }
+        }
+        
+        if anotherNumber.count > 11 {
+            anotherNumber.removeLast()
+        }
+        
+        if result.count == 11 {
+            return result
+        } else if anotherNumber.count == 11 {
+            return anotherNumber
+        }
+        
+        return nil
     }
 }
 

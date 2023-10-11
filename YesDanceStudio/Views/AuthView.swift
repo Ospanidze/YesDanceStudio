@@ -7,9 +7,16 @@
 
 import UIKit
 
-class AuthView: UIView {
+final class AuthView: UIView {
     
     private var isPravite = true
+    
+    private let activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView(style: .large)
+        activityIndicator.color = .pinkColor()
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        return activityIndicator
+    }()
     
     private let logoImageView: UIImageView = {
         let imageView = UIImageView()
@@ -83,8 +90,25 @@ class AuthView: UIView {
         }
     }
     
+    func statusLabelIsGood() {
+        statusLabel.isHidden = false
+        statusLabel.text = "Good"
+        statusLabel.textColor = .systemGreen
+        statusLabel.shakeAnimation()
+    }
+    
     func statusLabelIsNotHidden() {
         statusLabel.isHidden = false
+        statusLabel.shakeAnimation()
+    }
+    
+    func activityIndicatorStartAnimating() {
+        activityIndicator.startAnimating()
+    }
+    
+    func activityIndicatorStopAnimating() {
+        activityIndicator.stopAnimating()
+        
     }
     
     private func configure() {
@@ -114,7 +138,8 @@ class AuthView: UIView {
             numberTextField,
             passwordTextField,
             authButton,
-            forgetButton
+            forgetButton,
+            activityIndicator
         )
         
         setupPasswordTextField()
@@ -154,13 +179,13 @@ extension AuthView: UITextFieldDelegate {
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
+
         guard textField == numberTextField else { return true }
-        
+
         if let text = textField.text, let rangeText = Range(range, in: text) {
-            
+
             let updateText = text.replacingCharacters(in: rangeText, with: string)
-            
+
             numberTextField.text = updateText.formatMobileNumber()
             return false
         }
@@ -177,6 +202,12 @@ extension AuthView: UITextFieldDelegate {
 
 extension AuthView {
     private func setupLayout() {
+        
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: centerYAnchor),
+        ])
+        
         NSLayoutConstraint.activate([
             logoImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
             logoImageView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 78),
